@@ -2569,6 +2569,106 @@ body.nav-menu-open {
 .book-demo-select:focus {
   outline: none;
   border-color: #800020;
+  box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.12);
+}
+
+/* ─── Demo Day / Date Selection (Calendar & Quick Chips) ─── */
+.demo-selected-date-preview {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #800020;
+  letter-spacing: 0.02em;
+  background: rgba(128, 0, 32, 0.08);
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(128, 0, 32, 0.18);
+}
+
+.demo-date-quick-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0.15rem 0 0.55rem;
+  margin-bottom: 0.35rem;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.demo-date-quick-chips::-webkit-scrollbar {
+  height: 4px;
+}
+
+.demo-date-quick-chips::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.demo-date-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.85rem;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  font-family: inherit;
+  user-select: none;
+}
+
+.demo-date-chip strong {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0A0A0A;
+  line-height: 1.2;
+}
+
+.demo-date-chip span {
+  font-size: 0.68rem;
+  color: #666666;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.demo-date-chip:hover {
+  border-color: rgba(128, 0, 32, 0.4);
+  background: #FAF8F9;
+  transform: translateY(-1px);
+}
+
+.demo-date-chip.is-active {
+  border-color: #800020;
+  background: #800020;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(128, 0, 32, 0.28);
+}
+
+.demo-date-chip.is-active strong,
+.demo-date-chip.is-active span {
+  color: #FFFFFF;
+}
+
+.book-demo-date-input {
+  cursor: pointer;
+  color: #0A0A0A;
+}
+
+.book-demo-date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(12%) sepia(85%) saturate(5420%) hue-rotate(338deg) brightness(85%) contrast(105%);
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.book-demo-date-input::-webkit-calendar-picker-indicator:hover {
+  background: rgba(128, 0, 32, 0.08);
+}
+  border-color: #800020;
   box-shadow: 0 0 0 3.5px rgba(128, 0, 32, 0.15);
   background-color: #FFFFFF;
 }

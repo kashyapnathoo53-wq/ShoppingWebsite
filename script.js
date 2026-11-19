@@ -515,12 +515,124 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalBackdropEl) modalBackdropEl.addEventListener('click', closeModal);
 
     // ═══════════════════════════════════════════════════════════
-    // 8. INLINE BOOK A DEMO FORM HANDLER & VALIDATION
+    // 8. INLINE BOOK A DEMO FORM HANDLER & VALIDATION (WITH CALENDAR)
     // ═══════════════════════════════════════════════════════════
     const inlineDemoForm = document.getElementById('inlineDemoForm');
     const inlineDemoSuccess = document.getElementById('inlineDemoSuccess');
     const inlineDemoResetBtn = document.getElementById('inlineDemoResetBtn');
     const demoPhoneInput = document.getElementById('demoPhone');
+    const demoDateInput = document.getElementById('demoDate');
+    const demoDatePreview = document.getElementById('demoDatePreview');
+    const demoQuickChips = document.getElementById('demoQuickDateChips');
+
+    // Helper: format Date object to YYYY-MM-DD
+    function toISODate(d) {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Helper: format date for readable display
+    function formatDisplayDate(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const target = new Date(d);
+        target.setHours(0, 0, 0, 0);
+
+        const diffDays = Math.round((target - today) / (1000 * 60 * 60 * 24));
+        const dayName = d.toLocaleDateString('en-IN', { weekday: 'short' });
+        const dayNum = d.getDate();
+        const monthName = d.toLocaleDateString('en-IN', { month: 'short' });
+
+        if (diffDays === 0) return `Today (${dayName}, ${dayNum} ${monthName})`;
+        if (diffDays === 1) return `Tomorrow (${dayName}, ${dayNum} ${monthName})`;
+        return `${dayName}, ${dayNum} ${monthName}`;
+    }
+
+    // Initialize Calendar Date Picker & Quick Day Chips
+    function initDemoDatePicker() {
+        if (!demoDateInput) return;
+
+        const now = new Date();
+        const todayStr = toISODate(now);
+
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = toISODate(tomorrow);
+
+        const maxDate = new Date();
+        maxDate.setDate(maxDate.getDate() + 30);
+        const maxStr = toISODate(maxDate);
+
+        demoDateInput.min = todayStr;
+        demoDateInput.max = maxStr;
+        demoDateInput.value = tomorrowStr;
+
+        if (demoDatePreview) {
+            demoDatePreview.textContent = formatDisplayDate(tomorrowStr);
+        }
+
+        // Generate next 6 days quick chips
+        if (demoQuickChips) {
+            demoQuickChips.innerHTML = '';
+            for (let i = 0; i <= 5; i++) {
+                const cur = new Date();
+                cur.setDate(cur.getDate() + i);
+                const isoStr = toISODate(cur);
+
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'demo-date-chip' + (isoStr === tomorrowStr ? ' is-active' : '');
+                chip.dataset.date = isoStr;
+
+                const dayLabel = i === 0 ? 'Today' : (i === 1 ? 'Tomorrow' : cur.toLocaleDateString('en-IN', { weekday: 'short' }));
+                const dateLabel = `${cur.getDate()} ${cur.toLocaleDateString('en-IN', { month: 'short' })}`;
+
+                chip.innerHTML = `<strong>${dayLabel}</strong><span>${dateLabel}</span>`;
+                chip.setAttribute('aria-label', `Select ${dayLabel}, ${dateLabel}`);
+
+                chip.addEventListener('click', () => {
+                    demoDateInput.value = isoStr;
+                    document.querySelectorAll('.demo-date-chip').forEach(c => c.classList.remove('is-active'));
+                    chip.classList.add('is-active');
+                    if (demoDatePreview) {
+                        demoDatePreview.textContent = formatDisplayDate(isoStr);
+                    }
+                    const err = document.getElementById('dateError');
+                    if (err) err.textContent = '';
+                });
+
+                demoQuickChips.appendChild(chip);
+            }
+        }
+
+        // When user interacts with the calendar picker input directly:
+        demoDateInput.addEventListener('change', () => {
+            const val = demoDateInput.value;
+            if (demoDatePreview) {
+                demoDatePreview.textContent = formatDisplayDate(val);
+            }
+            // Update active state on chips
+            if (demoQuickChips) {
+                document.querySelectorAll('.demo-date-chip').forEach(chip => {
+                    if (chip.dataset.date === val) {
+                        chip.classList.add('is-active');
+                    } else {
+                        chip.classList.remove('is-active');
+                    }
+                });
+            }
+            const err = document.getElementById('dateError');
+            if (err) err.textContent = '';
+        });
+    }
+
+    initDemoDatePicker();
 
     // Strict 10-digit mobile enforcement on demo form
     if (demoPhoneInput) {
@@ -569,16 +681,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const phoneInput = document.getElementById('demoPhone');
             const addressInput = document.getElementById('demoAddress');
             const cityInput = document.getElementById('demoCityPincode');
+            const dateInput = document.getElementById('demoDate');
             const phoneError = document.getElementById('phoneError');
             const fullNameError = document.getElementById('fullNameError');
             const addressError = document.getElementById('addressError');
             const cityError = document.getElementById('cityPincodeError');
+            const dateError = document.getElementById('dateError');
 
             let isValid = true;
             if (phoneError) phoneError.textContent = '';
             if (fullNameError) fullNameError.textContent = '';
             if (addressError) addressError.textContent = '';
             if (cityError) cityError.textContent = '';
+            if (dateError) dateError.textContent = '';
 
             // Name validation
             if (!fullNameInput || !fullNameInput.value.trim()) {
@@ -611,6 +726,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 isValid = false;
             }
 
+            // Date validation
+            if (!dateInput || !dateInput.value) {
+                if (dateError) dateError.textContent = 'Please select a preferred demo date';
+                if (isValid && dateInput) dateInput.focus();
+                isValid = false;
+            }
+
             if (!isValid) return;
 
             const submitBtn = document.getElementById('inlineDemoSubmitBtn');
@@ -626,9 +748,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     afternoon: 'Afternoon Slot (1:00 PM – 5:00 PM)',
                     evening: 'Evening Slot (5:00 PM – 8:00 PM)'
                 };
+                const formattedDate = formatDisplayDate(dateInput.value) || dateInput.value;
                 const successDesc = document.getElementById('inlineDemoSuccessDesc');
                 if (successDesc) {
-                    successDesc.textContent = `Thank you! Your free doorstep demo is booked for ${slotMap[selectedSlot]}. Our certified water technician will call you shortly to verify your visit.`;
+                    successDesc.textContent = `Thank you! Your free doorstep demo is booked for ${formattedDate} during the ${slotMap[selectedSlot]}. Our certified water technician will call you shortly to verify your visit.`;
                 }
 
                 inlineDemoForm.style.display = 'none';
@@ -658,6 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inlineDemoResetBtn.addEventListener('click', () => {
             if (inlineDemoForm) {
                 inlineDemoForm.reset();
+                initDemoDatePicker();
                 inlineDemoForm.style.display = 'block';
             }
             if (inlineDemoSuccess) inlineDemoSuccess.style.display = 'none';
