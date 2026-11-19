@@ -1909,7 +1909,7 @@ body.nav-menu-open {
   margin-left: 0 !important;
   margin-right: 0 !important;
   padding-top: var(--nav-height, 70px) !important;
-  padding-bottom: 2.5rem;
+  padding-bottom: 0.5rem;
   padding-left: 0;
   padding-right: 0;
   background: #FFFFFF !important;
@@ -2097,7 +2097,7 @@ body.nav-menu-open {
 .detail-hero-copy {
   width: min(100%, 1440px);
   margin: 0 auto;
-  padding: 0.5rem var(--content-padding, 1.5rem) 1.5rem;
+  padding: 0.5rem var(--content-padding, 1.5rem) 0.5rem;
   box-sizing: border-box;
   text-align: center;
   display: flex;
@@ -2850,8 +2850,9 @@ body.nav-menu-open {
 }
 
 .detail-chooser-section {
-  padding: 1.75rem 0;
-  scroll-margin-top: calc(var(--nav-height, 90px) + 1rem);
+  padding-top: 0.75rem !important;
+  padding-bottom: 1.75rem;
+  scroll-margin-top: calc(var(--nav-height, 70px) + 0.5rem);
 }
 
 .detail-rail-card-media {
