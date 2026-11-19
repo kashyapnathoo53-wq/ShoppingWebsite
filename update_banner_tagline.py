@@ -146,7 +146,7 @@ p3_clean = p_star.crop((315, 70, 923, 938))
 p_sup = Image.open('p_supreme.webp').convert('RGBA')
 p4_clean = p_sup.crop((311, 60, 916, 933))
 
-TARGET_H = 295
+TARGET_H = 280
 purifiers = [
     ('Pearl IoT', p1_clean),
     ('Grand IoT', p2_clean),
@@ -167,8 +167,10 @@ available_span = 1335 - start_x
 remaining_gap_total = available_span - total_models_w
 gap = remaining_gap_total // 3
 
-py = (HEIGHT - TARGET_H) // 2
-base_y = py + TARGET_H  # 429px
+# Generous 135px headroom so top of machines never gets cropped
+py = 135
+base_y = py + TARGET_H  # 415px
+FLOOR_Y = 413
 
 # 5. Realistic Soft Pedestal & Contact Shadow Layer on the Travertine Floor
 shadow_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
