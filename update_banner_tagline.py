@@ -5,55 +5,61 @@ WIDTH = 1376
 HEIGHT = 545
 
 # 1. Background plate with clean travertine floor and realistic mid-air water arc
-# "And don't change the background." - Keep the exact approved background plate!
+# "And don't change the background." - Keep the exact approved background plate 100% intact!
 plate_path = r'C:\Users\ADMIN\.gemini\antigravity\brain\c228a748-d79c-4230-b18c-69a39bc2446e\purifier_background_plate_flat_floor_1795120218808.jpg'
 bg_raw = Image.open(plate_path).convert('RGB')
 bg = bg_raw.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS).convert('RGBA')
 
-# 2. Both RO Machines from the user's second image (100% WHOLESOME, UNTRUNCATED)
-# Machine 1: Pearl IoT (white)
-# Machine 2: Grand IoT (black)
-# Both machines match the user's reference image exactly, with complete rounded bases, feet, and nozzles.
-pair_path = os.path.join('images', 'both_ro_pair.png')
-pair = Image.open(pair_path).convert('RGBA')
+# 2. All 4 KENT RO Purifiers from the user's reference image (100% WHOLESOME, UNTRUNCATED)
+# Product 1: KENT Pearl IoT (white/transparent tank with copper-tone tap)
+# Product 2: KENT Grand IoT (matte black unit with copper-tone accents & tap)
+# Product 3: KENT Grand (white unit with transparent upper filtration chamber)
+# Product 4: KENT Supreme Plus Neo (black and silver unit with dispensing glass & 2-year warranty badge)
+lineup_path = os.path.join('images', 'four_ro_lineup.png')
+lineup = Image.open(lineup_path).convert('RGBA')
 
-# Scale pair to prominent hero size
-TARGET_H = 355
-aspect = pair.width / float(pair.height)
+# Scale lineup to balanced hero size
+TARGET_H = 285
+aspect = lineup.width / float(lineup.height)
 pair_w = int(TARGET_H * aspect)
-scaled_pair = pair.resize((pair_w, TARGET_H), Image.Resampling.LANCZOS)
+scaled_lineup = lineup.resize((pair_w, TARGET_H), Image.Resampling.LANCZOS)
 
-# Position pair on the right side, framed by the sweeping liquid water arc
-start_x = 720
+# Position lineup on the right side, framed by the sweeping liquid water arc
+start_x = 460
 base_y = 445
-py = base_y - TARGET_H  # headroom above machines = 90px
+py = base_y - TARGET_H  # headroom above machines = 160px for the sweeping liquid water arc
 
 # 3. Soft Realistic Contact Shadow Layer on Travertine Floor
 shadow_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
 shadow_draw = ImageDraw.Draw(shadow_layer)
 
-def add_contact_shadow(cx, b_y, rx, ry, opacity=120):
+def add_contact_shadow(cx, b_y, rx, ry, opacity=115):
+    # Core occlusion line directly under the feet
     for i in range(5):
         f = 1.0 - (i / 5.0)
-        shadow_draw.ellipse([cx - rx*0.75, b_y - 2 - i, cx + rx*0.75, b_y + 2 + i], fill=(35, 30, 25, int(opacity * 0.45 * f)))
-    for i in range(14):
-        factor = 1.0 - (i / 14.0)
-        cur_rx = int(rx * (1.0 + i * 0.14))
-        cur_ry = int(ry * (1.0 + i * 0.14))
-        alpha = int(opacity * factor * 0.28)
+        shadow_draw.ellipse([cx - rx*0.72, b_y - 2 - i, cx + rx*0.72, b_y + 2 + i], fill=(30, 25, 20, int(opacity * 0.45 * f)))
+    # Ambient soft diffusion grounding the base to the travertine floor
+    for i in range(12):
+        factor = 1.0 - (i / 12.0)
+        cur_rx = int(rx * (1.0 + i * 0.12))
+        cur_ry = int(ry * (1.0 + i * 0.12))
+        alpha = int(opacity * factor * 0.26)
         shadow_draw.ellipse(
             [cx - cur_rx, b_y - cur_ry, cx + cur_rx, b_y + cur_ry],
             fill=(45, 40, 35, alpha)
         )
 
-# In scaled pair: Pearl center is at ~0.26 * pair_w, Grand center is at ~0.74 * pair_w
-cx_pearl = start_x + int(pair_w * 0.26)
-cx_grand = start_x + int(pair_w * 0.74)
-add_contact_shadow(cx_pearl, base_y - 4, int(pair_w * 0.22), 14, opacity=120)
-add_contact_shadow(cx_grand, base_y - 4, int(pair_w * 0.20), 14, opacity=120)
+# Relative center positions of the 4 machines inside four_ro_lineup.png:
+# M1 Pearl IoT: 0.1347 | M2 Grand IoT: 0.3945 | M3 KENT Grand: 0.6434 | M4 Supreme Plus Neo: 0.8796
+centers_rel = [0.1347, 0.3945, 0.6434, 0.8796]
+rx = int(pair_w * 0.105)
 
-shadow_layer.paste(scaled_pair, (start_x, py), scaled_pair)
-print(f"Both RO machines placed at x=({start_x}, {start_x+pair_w}), y=({py}, {py+TARGET_H})")
+for c_rel in centers_rel:
+    cx = start_x + int(pair_w * c_rel)
+    add_contact_shadow(cx, base_y - 3, rx, 11, opacity=115)
+
+shadow_layer.paste(scaled_lineup, (start_x, py), scaled_lineup)
+print(f"Four RO machines placed at x=({start_x}, {start_x+pair_w}), y=({py}, {py+TARGET_H})")
 
 banner = Image.alpha_composite(bg, shadow_layer).convert('RGB')
 draw = ImageDraw.Draw(banner)
