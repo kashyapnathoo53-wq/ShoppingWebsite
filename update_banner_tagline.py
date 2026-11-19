@@ -5,49 +5,30 @@ WIDTH = 1376
 HEIGHT = 545
 
 # 1. Background plate with clean travertine floor and realistic mid-air water arc
+# "And don't change the background." - Keep the exact approved background plate!
 plate_path = r'C:\Users\ADMIN\.gemini\antigravity\brain\c228a748-d79c-4230-b18c-69a39bc2446e\purifier_background_plate_flat_floor_1795120218808.jpg'
 bg_raw = Image.open(plate_path).convert('RGB')
 bg = bg_raw.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS).convert('RGBA')
 
-# 2. Extract 4 100% WHOLESOME, UNTRUNCATED PURIFIER MACHINES
-# Model 1: Pearl IoT (complete white rounded base down to y=936)
-p1 = Image.open('images/purifier-pearl-wholesome.png').convert('RGBA')
+# 2. Both RO Machines from the user's second image (100% WHOLESOME, UNTRUNCATED)
+# Machine 1: Pearl IoT (white)
+# Machine 2: Grand IoT (black)
+# Both machines match the user's reference image exactly, with complete rounded bases, feet, and nozzles.
+pair_path = os.path.join('images', 'both_ro_pair.png')
+pair = Image.open(pair_path).convert('RGBA')
 
-# Model 2: Grand IoT (complete rounded body and full copper tap nozzle, no phone)
-p2 = Image.open('images/purifier-grand-wholesome.png').convert('RGBA')
+# Scale pair to prominent hero size
+TARGET_H = 355
+aspect = pair.width / float(pair.height)
+pair_w = int(TARGET_H * aspect)
+scaled_pair = pair.resize((pair_w, TARGET_H), Image.Resampling.LANCZOS)
 
-# Model 3: Grand Star (complete body, left curve, and full chrome/blue tap nozzle down to y=954)
-p3 = Image.open('images/purifier-star-wholesome.png').convert('RGBA')
+# Position pair on the right side, framed by the sweeping liquid water arc
+start_x = 720
+base_y = 445
+py = base_y - TARGET_H  # headroom above machines = 90px
 
-# Model 4: Supreme Plus Neo (complete body, water glass, and silver drip tray down to y=938)
-p4 = Image.open('images/purifier-supreme-wholesome.png').convert('RGBA')
-
-TARGET_H = 280
-purifiers = [
-    ('Pearl IoT', p1),
-    ('Grand IoT', p2),
-    ('Grand Star', p3),
-    ('Supreme Plus Neo', p4)
-]
-
-scaled_purifiers = []
-for name, im in purifiers:
-    aspect = im.width / float(im.height)
-    w = int(TARGET_H * aspect)
-    res = im.resize((w, TARGET_H), Image.Resampling.LANCZOS)
-    scaled_purifiers.append((name, res, w))
-
-total_models_w = sum(w for _, _, w in scaled_purifiers)
-start_x = 445
-available_span = 1335 - start_x
-remaining_gap_total = available_span - total_models_w
-gap = remaining_gap_total // 3
-
-# Floor horizon in bg is at ~415; purifiers grounded cleanly at base_y = 440
-base_y = 440
-py = base_y - TARGET_H  # 160px headroom above machines
-
-# 3. Soft Realistic Contact Shadow Layer on Floor
+# 3. Soft Realistic Contact Shadow Layer on Travertine Floor
 shadow_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
 shadow_draw = ImageDraw.Draw(shadow_layer)
 
@@ -65,13 +46,14 @@ def add_contact_shadow(cx, b_y, rx, ry, opacity=120):
             fill=(45, 40, 35, alpha)
         )
 
-cur_x = start_x
-for name, res_im, w in scaled_purifiers:
-    cx = cur_x + w // 2
-    add_contact_shadow(cx, base_y - 4, int(w * 0.44), 14, opacity=120)
-    shadow_layer.paste(res_im, (cur_x, py), res_im)
-    print(f"{name:18s} placed at x=({cur_x:4d}, {cur_x+w:4d}), y=({py:3d}, {py+TARGET_H:3d})")
-    cur_x += w + gap
+# In scaled pair: Pearl center is at ~0.26 * pair_w, Grand center is at ~0.74 * pair_w
+cx_pearl = start_x + int(pair_w * 0.26)
+cx_grand = start_x + int(pair_w * 0.74)
+add_contact_shadow(cx_pearl, base_y - 4, int(pair_w * 0.22), 14, opacity=120)
+add_contact_shadow(cx_grand, base_y - 4, int(pair_w * 0.20), 14, opacity=120)
+
+shadow_layer.paste(scaled_pair, (start_x, py), scaled_pair)
+print(f"Both RO machines placed at x=({start_x}, {start_x+pair_w}), y=({py}, {py+TARGET_H})")
 
 banner = Image.alpha_composite(bg, shadow_layer).convert('RGB')
 draw = ImageDraw.Draw(banner)
@@ -150,32 +132,6 @@ badges_file = 'delicate_burgundy_badges.png'
 if os.path.exists(badges_file):
     b_img = Image.open(badges_file)
     banner.paste(b_img, (LEFT_X, 366), b_img)
-
-# 6. Smooth feathering into pure white #FFFFFF at top and bottom
-# Top 12px soft blend to pure white (255, 255, 255):
-white_target = (255, 255, 255)
-for y in range(12):
-    alpha = (12 - y) / 14.0
-    for x in range(WIDTH):
-        cur = banner.getpixel((x, y))
-        blended = (
-            int(cur[0] * (1 - alpha) + white_target[0] * alpha),
-            int(cur[1] * (1 - alpha) + white_target[1] * alpha),
-            int(cur[2] * (1 - alpha) + white_target[2] * alpha)
-        )
-        banner.putpixel((x, y), blended)
-
-# Bottom 40px soft blend into pure white (255, 255, 255):
-for y in range(HEIGHT - 40, HEIGHT):
-    alpha = (y - (HEIGHT - 40)) / 40.0
-    for x in range(WIDTH):
-        cur = banner.getpixel((x, y))
-        blended = (
-            int(cur[0] * (1 - alpha) + white_target[0] * alpha),
-            int(cur[1] * (1 - alpha) + white_target[1] * alpha),
-            int(cur[2] * (1 - alpha) + white_target[2] * alpha)
-        )
-        banner.putpixel((x, y), blended)
 
 # Save final banner
 output_path = os.path.join('images', 'kent-purifiers-banner.webp')
