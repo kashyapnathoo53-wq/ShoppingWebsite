@@ -9,11 +9,6 @@ plate_path = r'C:\Users\ADMIN\.gemini\antigravity\brain\c228a748-d79c-4230-b18c-
 bg_raw = Image.open(plate_path).convert('RGB')
 bg = bg_raw.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS).convert('RGBA')
 
-# NOTE: The water arc flows naturally in the background across the scene.
-# We DO NOT paste a flat stretched floor rectangle across the full width,
-# which previously cut off the water splash and created a visible horizontal seam.
-# The water effect continues uninterrupted and flows smoothly!
-
 # 2. Extract 4 100% WHOLESOME, UNTRUNCATED PURIFIER MACHINES
 # Model 1: Pearl IoT (complete white rounded base down to y=936)
 p1 = Image.open('images/purifier-pearl-wholesome.png').convert('RGBA')
@@ -52,7 +47,7 @@ gap = remaining_gap_total // 3
 base_y = 440
 py = base_y - TARGET_H  # 160px headroom above machines
 
-# 3. Soft Realistic Contact Shadow Layer on Travertine Floor
+# 3. Soft Realistic Contact Shadow Layer on Floor
 shadow_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
 shadow_draw = ImageDraw.Draw(shadow_layer)
 
@@ -156,30 +151,29 @@ if os.path.exists(badges_file):
     b_img = Image.open(badges_file)
     banner.paste(b_img, (LEFT_X, 366), b_img)
 
-# 6. Smooth feathering at the top (to seamlessly meet navbar #FAF9F6) and bottom (to meet travertine section floor #DFDAD0)
-# Top 10px soft blend:
-top_blend_target = (250, 249, 246)  # #FAF9F6
-for y in range(8):
-    alpha = (8 - y) / 10.0
+# 6. Smooth feathering into pure white #FFFFFF at top and bottom
+# Top 12px soft blend to pure white (255, 255, 255):
+white_target = (255, 255, 255)
+for y in range(12):
+    alpha = (12 - y) / 14.0
     for x in range(WIDTH):
         cur = banner.getpixel((x, y))
         blended = (
-            int(cur[0] * (1 - alpha) + top_blend_target[0] * alpha),
-            int(cur[1] * (1 - alpha) + top_blend_target[1] * alpha),
-            int(cur[2] * (1 - alpha) + top_blend_target[2] * alpha)
+            int(cur[0] * (1 - alpha) + white_target[0] * alpha),
+            int(cur[1] * (1 - alpha) + white_target[1] * alpha),
+            int(cur[2] * (1 - alpha) + white_target[2] * alpha)
         )
         banner.putpixel((x, y), blended)
 
-# Bottom 20px soft blend into the travertine section floor:
-floor_target = (223, 218, 208)  # #DFDAD0
-for y in range(HEIGHT - 20, HEIGHT):
-    alpha = (y - (HEIGHT - 20)) / 22.0
+# Bottom 40px soft blend into pure white (255, 255, 255):
+for y in range(HEIGHT - 40, HEIGHT):
+    alpha = (y - (HEIGHT - 40)) / 40.0
     for x in range(WIDTH):
         cur = banner.getpixel((x, y))
         blended = (
-            int(cur[0] * (1 - alpha) + floor_target[0] * alpha),
-            int(cur[1] * (1 - alpha) + floor_target[1] * alpha),
-            int(cur[2] * (1 - alpha) + floor_target[2] * alpha)
+            int(cur[0] * (1 - alpha) + white_target[0] * alpha),
+            int(cur[1] * (1 - alpha) + white_target[1] * alpha),
+            int(cur[2] * (1 - alpha) + white_target[2] * alpha)
         )
         banner.putpixel((x, y), blended)
 
