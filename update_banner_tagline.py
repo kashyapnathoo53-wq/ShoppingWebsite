@@ -7,21 +7,12 @@ HEIGHT = 545
 # 1. Background plate with clean travertine floor and realistic mid-air water arc
 plate_path = r'C:\Users\ADMIN\.gemini\antigravity\brain\c228a748-d79c-4230-b18c-69a39bc2446e\purifier_background_plate_flat_floor_1795120218808.jpg'
 bg_raw = Image.open(plate_path).convert('RGB')
-bg = bg_raw.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS)
+bg = bg_raw.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS).convert('RGBA')
 
-# Create a seamless, unblemished travertine floor plane across the bottom (y >= 415)
-# so no water splash cuts through the bottom of the purifier units:
-sample = bg.crop((100, 415, 300, 545))
-stretched_floor = sample.resize((WIDTH, 130), Image.Resampling.LANCZOS)
-
-mask = Image.new('L', (WIDTH, 130), 255)
-for y in range(15):
-    alpha = int(255 * (y / 15.0))
-    for x in range(WIDTH):
-        mask.putpixel((x, y), alpha)
-
-bg.paste(stretched_floor, (0, 415), mask)
-bg = bg.convert('RGBA')
+# NOTE: The water arc flows naturally in the background across the scene.
+# We DO NOT paste a flat stretched floor rectangle across the full width,
+# which previously cut off the water splash and created a visible horizontal seam.
+# The water effect continues uninterrupted and flows smoothly!
 
 # 2. Extract 4 100% WHOLESOME, UNTRUNCATED PURIFIER MACHINES
 # Model 1: Pearl IoT (complete white rounded base down to y=936)
@@ -57,7 +48,7 @@ available_span = 1335 - start_x
 remaining_gap_total = available_span - total_models_w
 gap = remaining_gap_total // 3
 
-# Floor horizon in bg is at 415; purifiers grounded cleanly at base_y = 440
+# Floor horizon in bg is at ~415; purifiers grounded cleanly at base_y = 440
 base_y = 440
 py = base_y - TARGET_H  # 160px headroom above machines
 
@@ -111,7 +102,7 @@ f_tagline = ImageFont.truetype(font_dm_path, 42)
 text1 = "Mineral Technology"
 text2 = "Pure Hydration"
 
-# Line 1: Crisp Dark Charcoal/Black #0A0A0A
+# Line 1: Crisp Dark Charcoal/Black #0A0A0A (NO FULL STOP)
 draw.text((LEFT_X, 150), text1, font=f_tagline, fill=(10, 10, 10))
 
 # Line 2: Precision Multi-Stop Gradient matching Website Color Palette:
@@ -151,7 +142,7 @@ mask_draw.text((2 - b2[0], 2 - b2[1]), text2, font=f_tagline, fill=255)
 line2_composite = Image.new('RGBA', (w2 + 4, h2 + 4), (0, 0, 0, 0))
 line2_composite.paste(gradient_img, (0, 0), mask)
 
-# Paste line 2 at y=204
+# Paste line 2 at y=204 (NO FULL STOP)
 banner.paste(line2_composite, (LEFT_X + b2[0] - 2, 204 + b2[1] - 2), mask)
 
 # Subtitle / Add-on
@@ -164,6 +155,33 @@ badges_file = 'delicate_burgundy_badges.png'
 if os.path.exists(badges_file):
     b_img = Image.open(badges_file)
     banner.paste(b_img, (LEFT_X, 366), b_img)
+
+# 6. Smooth feathering at the top (to seamlessly meet navbar #FAF9F6) and bottom (to meet travertine section floor #DFDAD0)
+# Top 10px soft blend:
+top_blend_target = (250, 249, 246)  # #FAF9F6
+for y in range(8):
+    alpha = (8 - y) / 10.0
+    for x in range(WIDTH):
+        cur = banner.getpixel((x, y))
+        blended = (
+            int(cur[0] * (1 - alpha) + top_blend_target[0] * alpha),
+            int(cur[1] * (1 - alpha) + top_blend_target[1] * alpha),
+            int(cur[2] * (1 - alpha) + top_blend_target[2] * alpha)
+        )
+        banner.putpixel((x, y), blended)
+
+# Bottom 20px soft blend into the travertine section floor:
+floor_target = (223, 218, 208)  # #DFDAD0
+for y in range(HEIGHT - 20, HEIGHT):
+    alpha = (y - (HEIGHT - 20)) / 22.0
+    for x in range(WIDTH):
+        cur = banner.getpixel((x, y))
+        blended = (
+            int(cur[0] * (1 - alpha) + floor_target[0] * alpha),
+            int(cur[1] * (1 - alpha) + floor_target[1] * alpha),
+            int(cur[2] * (1 - alpha) + floor_target[2] * alpha)
+        )
+        banner.putpixel((x, y), blended)
 
 # Save final banner
 output_path = os.path.join('images', 'kent-purifiers-banner.webp')
