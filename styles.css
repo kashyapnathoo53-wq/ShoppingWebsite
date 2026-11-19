@@ -2688,6 +2688,8 @@ body.nav-menu-open {
 .book-demo-date-input::-webkit-calendar-picker-indicator:hover {
   background: rgba(78, 54, 41, 0.08);
 }
+
+.book-demo-date-input:focus {
   border-color: #4E3629;
   box-shadow: 0 0 0 3.5px rgba(78, 54, 41, 0.15);
   background-color: #FFFFFF;
