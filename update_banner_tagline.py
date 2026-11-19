@@ -4,37 +4,44 @@ from PIL import Image, ImageDraw, ImageFont
 WIDTH = 1376
 HEIGHT = 545
 
-# 1. Load Photorealistic Studio Background with Crystal Water Arc & Sunlit Caustics
-# Generated directly from user reference with all products, pedestals, and text removed.
+# 1. Background plate with clean travertine floor and realistic mid-air water arc
 plate_path = r'C:\Users\ADMIN\.gemini\antigravity\brain\c228a748-d79c-4230-b18c-69a39bc2446e\purifier_background_plate_flat_floor_1795120218808.jpg'
-if not os.path.exists(plate_path):
-    # Fallback to local copy if available
-    plate_path = 'purifier_background_plate_flat_floor.jpg'
-
 bg_raw = Image.open(plate_path).convert('RGB')
-# Resize smoothly to the target banner dimensions (1376 x 545)
-bg = bg_raw.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS).convert('RGBA')
+bg = bg_raw.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS)
 
-# 2. Extract & Place the 4 UNTOUCHED KENT RO Purifier Machines
-p_pearl = Image.open('images/kent-pearl-left.webp').convert('RGBA')
-p1_clean = p_pearl.crop((170, 61, 829, 932))
+# Create a seamless, unblemished travertine floor plane across the bottom (y >= 415)
+# so no water splash cuts through the bottom of the purifier units:
+sample = bg.crop((100, 415, 300, 545))
+stretched_floor = sample.resize((WIDTH, 130), Image.Resampling.LANCZOS)
 
-p_grand = Image.open('p_grand.png').convert('RGBA')
-p_grand_no_phone = p_grand.crop((111, 0, p_grand.width, p_grand.height))
-p2_clean = p_grand_no_phone.crop((0, 9, 259, 387))
+mask = Image.new('L', (WIDTH, 130), 255)
+for y in range(15):
+    alpha = int(255 * (y / 15.0))
+    for x in range(WIDTH):
+        mask.putpixel((x, y), alpha)
 
-p_star = Image.open('p_grandstar.webp').convert('RGBA')
-p3_clean = p_star.crop((315, 70, 923, 938))
+bg.paste(stretched_floor, (0, 415), mask)
+bg = bg.convert('RGBA')
 
-p_sup = Image.open('p_supreme.webp').convert('RGBA')
-p4_clean = p_sup.crop((311, 60, 916, 933))
+# 2. Extract 4 100% WHOLESOME, UNTRUNCATED PURIFIER MACHINES
+# Model 1: Pearl IoT (complete white rounded base down to y=936)
+p1 = Image.open('images/purifier-pearl-wholesome.png').convert('RGBA')
+
+# Model 2: Grand IoT (complete rounded body and full copper tap nozzle, no phone)
+p2 = Image.open('images/purifier-grand-wholesome.png').convert('RGBA')
+
+# Model 3: Grand Star (complete body, left curve, and full chrome/blue tap nozzle down to y=954)
+p3 = Image.open('images/purifier-star-wholesome.png').convert('RGBA')
+
+# Model 4: Supreme Plus Neo (complete body, water glass, and silver drip tray down to y=938)
+p4 = Image.open('images/purifier-supreme-wholesome.png').convert('RGBA')
 
 TARGET_H = 280
 purifiers = [
-    ('Pearl IoT', p1_clean),
-    ('Grand IoT', p2_clean),
-    ('Grand Star', p3_clean),
-    ('Supreme Plus Neo', p4_clean)
+    ('Pearl IoT', p1),
+    ('Grand IoT', p2),
+    ('Grand Star', p3),
+    ('Supreme Plus Neo', p4)
 ]
 
 scaled_purifiers = []
@@ -50,11 +57,11 @@ available_span = 1335 - start_x
 remaining_gap_total = available_span - total_models_w
 gap = remaining_gap_total // 3
 
-# Floor horizon sits at base_y = 440, ensuring generous 160px headroom above machines
+# Floor horizon in bg is at 415; purifiers grounded cleanly at base_y = 440
 base_y = 440
-py = base_y - TARGET_H  # 160px
+py = base_y - TARGET_H  # 160px headroom above machines
 
-# 3. Realistic Soft Pedestal & Contact Shadow Layer on Travertine Floor
+# 3. Soft Realistic Contact Shadow Layer on Travertine Floor
 shadow_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
 shadow_draw = ImageDraw.Draw(shadow_layer)
 
@@ -83,7 +90,7 @@ for name, res_im, w in scaled_purifiers:
 banner = Image.alpha_composite(bg, shadow_layer).convert('RGB')
 draw = ImageDraw.Draw(banner)
 
-# 4. Left Typography Lockup: Brand + Website Burgundy/Gold Color Theme Tagline
+# 4. Left Typography Lockup: Brand + Website Burgundy/Gold Color Theme Tagline (NO FULL STOPS)
 LEFT_X = 42
 font_bold = r'C:\Windows\Fonts\segoeuib.ttf'
 font_arial_bold = r'C:\Windows\Fonts\arialbd.ttf'
@@ -97,7 +104,7 @@ draw.text((LEFT_X, 48), 'KENT', font=font_logo_big, fill=(15, 45, 95))
 draw.text((LEFT_X + 152, 50), '®', font=font_logo_reg, fill=(40, 40, 40))
 draw.text((LEFT_X + 2, 94), 'HOUSE OF PURITY', font=font_tag, fill=(130, 130, 135))
 
-# 5. TAGLINE IN DM SERIF DISPLAY WITH WEBSITE BURGUNDY & GOLD COLOR THEME
+# 5. TAGLINE IN DM SERIF DISPLAY (NO FULL STOPS) WITH WEBSITE BURGUNDY & GOLD COLOR THEME
 font_dm_path = 'fonts/DMSerifDisplay-Regular.ttf' if os.path.exists('fonts/DMSerifDisplay-Regular.ttf') else 'DMSerifDisplay-Regular.ttf'
 f_tagline = ImageFont.truetype(font_dm_path, 42)
 
