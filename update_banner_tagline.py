@@ -6,51 +6,44 @@ WIDTH = 1376
 HEIGHT = 545
 
 # 1. Base Architectural Surface: Warm alabaster wall to grounded travertine floor
-# Wall: #F8F7F3 to #ECE8E1 (y: 0 to 425)
-# Floor plane: #E4DFD5 to #DAD4C8 (y: 425 to 545) with soft stone horizon
 banner = Image.new('RGB', (WIDTH, HEIGHT), (248, 247, 243))
 draw = ImageDraw.Draw(banner)
 
-FLOOR_Y = 418
+FLOOR_Y = 413
 
-# Draw Wall gradient (soft alabaster)
+# Draw Wall gradient (soft alabaster #F9F8F5 -> #ECE8E1)
 for y in range(FLOOR_Y):
     t = y / float(FLOOR_Y)
-    # #F9F8F5 (249, 248, 245) -> #ECE8E1 (236, 232, 225)
     r = int(249 - 13 * (t ** 1.2))
     g = int(248 - 16 * (t ** 1.2))
     b = int(245 - 20 * (t ** 1.2))
     draw.line([(0, y), (WIDTH, y)], fill=(r, g, b))
 
-# Draw Floor gradient (subtle grounded travertine/limestone plane)
+# Draw Floor gradient (grounded travertine/limestone plane #E7E2DA -> #DAD4C7)
 for y in range(FLOOR_Y, HEIGHT):
     t = (y - FLOOR_Y) / float(HEIGHT - FLOOR_Y)
-    # #E7E2DA (231, 226, 218) -> #DAD4C7 (218, 212, 199)
     r = int(231 - 13 * t)
     g = int(226 - 14 * t)
     b = int(218 - 19 * t)
     draw.line([(0, y), (WIDTH, y)], fill=(r, g, b))
 
-# Delicate floor horizon line with soft ambient contact occlusion
+# Floor horizon line with soft ambient contact occlusion
 draw.line([(0, FLOOR_Y), (WIDTH, FLOOR_Y)], fill=(215, 208, 196))
 draw.line([(0, FLOOR_Y + 1), (WIDTH, FLOOR_Y + 1)], fill=(245, 242, 236))
 
-# 2. Water Caustics Layer (Subtle, low-opacity 10-12% refracted sunlight effect across upper/mid wall)
+# 2. Water Caustics Layer (10-12% soft sun-refracted light web across upper/mid wall)
 caustic_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
 caustic_draw = ImageDraw.Draw(caustic_layer)
 
-# Create overlapping soft caustic light webs using bezier curves and light rings
 import random
 random.seed(42)
 
-# Cluster caustics mostly in top-right and center-right behind machines and upper wall
 for _ in range(35):
     cx = random.randint(300, WIDTH - 50)
     cy = random.randint(30, FLOOR_Y - 40)
     rx = random.randint(45, 110)
     ry = random.randint(25, 65)
     
-    # Caustic cell polygon / ellipse outline
     points = []
     num_pts = random.randint(5, 8)
     for i in range(num_pts):
@@ -64,7 +57,6 @@ for _ in range(35):
     caustic_draw.polygon(points, fill=(255, 255, 255, random.randint(8, 18)))
     caustic_draw.line(points + [points[0]], fill=(225, 245, 255, random.randint(18, 38)), width=random.randint(2, 4))
 
-# Soften caustics with Gaussian blur so they look like organic sunlight through crystal water
 caustic_layer = caustic_layer.filter(ImageFilter.GaussianBlur(16))
 banner = Image.alpha_composite(banner.convert('RGBA'), caustic_layer).convert('RGB')
 
@@ -72,13 +64,10 @@ banner = Image.alpha_composite(banner.convert('RGBA'), caustic_layer).convert('R
 water_arc_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
 arc_draw = ImageDraw.Draw(water_arc_layer)
 
-# Soft aqua/cyan ambient aura behind product cluster
 arc_draw.ellipse([580, 80, 1320, 420], fill=(56, 189, 248, 16))
 arc_draw.ellipse([700, 100, 1260, 380], fill=(186, 230, 253, 24))
 
-# Water Ribbon Path Coordinates: Sweeps gracefully up behind Pearl & Grand, crests behind Star & Supreme, and curves down
-# We draw layered translucent ribbons: Broad soft body, luminous core, and crisp specular crest
-def bezier_curve(p0, p1, p2, p3, steps=100):
+def bezier_curve(p0, p1, p2, p3, steps=120):
     pts = []
     for i in range(steps + 1):
         t = i / float(steps)
@@ -88,23 +77,18 @@ def bezier_curve(p0, p1, p2, p3, steps=100):
         pts.append((int(x), int(y)))
     return pts
 
-# Lower edge & Upper edge of sweeping water arc
-lower_pts = bezier_curve((420, 420), (620, 280), (840, 110), (1330, 260), steps=120)
-upper_pts = bezier_curve((460, 410), (640, 220), (860, 80), (1345, 240), steps=120)
+lower_pts = bezier_curve((420, 420), (620, 280), (840, 110), (1330, 260))
+upper_pts = bezier_curve((460, 410), (640, 220), (860, 80), (1345, 240))
 
-# Fill main water arc ribbon with translucent gradient
 ribbon_poly = lower_pts + upper_pts[::-1]
 arc_draw.polygon(ribbon_poly, fill=(186, 230, 253, 75))
 
-# Secondary luminous refraction ribbon (core)
-lower_core = bezier_curve((440, 415), (630, 255), (850, 100), (1335, 252), steps=120)
-upper_core = bezier_curve((455, 412), (638, 235), (858, 90), (1340, 246), steps=120)
+lower_core = bezier_curve((440, 415), (630, 255), (850, 100), (1335, 252))
+upper_core = bezier_curve((455, 412), (638, 235), (858, 90), (1340, 246))
 arc_draw.polygon(lower_core + upper_core[::-1], fill=(240, 249, 255, 110))
 
-# Specular light edge lines (pristine water crest refraction)
 for i in range(len(upper_pts) - 1):
     t = i / float(len(upper_pts))
-    # Alpha peaks around crest (t=0.5 to 0.75)
     alpha = int(220 * math.sin(t * math.pi))
     arc_draw.line([upper_pts[i], upper_pts[i+1]], fill=(255, 255, 255, alpha), width=3)
 
@@ -113,7 +97,6 @@ for i in range(len(lower_pts) - 1):
     alpha = int(140 * math.sin(t * math.pi))
     arc_draw.line([lower_pts[i], lower_pts[i+1]], fill=(125, 211, 252, alpha), width=2)
 
-# Tiny crystalline floating water drops/beads along the crest
 drops = [
     (790, 85, 4), (825, 78, 5.5), (870, 72, 6), (915, 76, 5), (960, 90, 4.5),
     (1010, 112, 5), (1060, 140, 4), (1110, 172, 5.5), (1165, 205, 4.5),
@@ -121,14 +104,10 @@ drops = [
 ]
 
 for dx, dy, dr in drops:
-    # Drop body
     arc_draw.ellipse([dx - dr, dy - dr, dx + dr, dy + dr], fill=(186, 230, 253, 140))
-    # Drop specular highlight
     arc_draw.ellipse([dx - dr*0.5, dy - dr*0.5, dx, dy], fill=(255, 255, 255, 230))
 
-# Soften outer edges slightly while keeping crest crisp
 water_arc_blurred = water_arc_layer.filter(ImageFilter.GaussianBlur(3))
-# Composite blurred + crisp core
 water_arc_composite = Image.alpha_composite(water_arc_blurred, water_arc_layer)
 banner = Image.alpha_composite(banner.convert('RGBA'), water_arc_composite).convert('RGB')
 
@@ -146,6 +125,7 @@ p3_clean = p_star.crop((315, 70, 923, 938))
 p_sup = Image.open('p_supreme.webp').convert('RGBA')
 p4_clean = p_sup.crop((311, 60, 916, 933))
 
+# Height 280 with py=135 guarantees 135px headroom above machines (no cropping)
 TARGET_H = 280
 purifiers = [
     ('Pearl IoT', p1_clean),
@@ -167,21 +147,17 @@ available_span = 1335 - start_x
 remaining_gap_total = available_span - total_models_w
 gap = remaining_gap_total // 3
 
-# Generous 135px headroom so top of machines never gets cropped
 py = 135
 base_y = py + TARGET_H  # 415px
-FLOOR_Y = 413
 
-# 5. Realistic Soft Pedestal & Contact Shadow Layer on the Travertine Floor
+# 5. Soft Contact Shadow Layer on the Travertine Floor
 shadow_layer = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
 shadow_draw = ImageDraw.Draw(shadow_layer)
 
 def add_contact_shadow(cx, b_y, rx, ry, opacity=115):
-    # Base contact occlusion (dark, narrow)
     for i in range(5):
         f = 1.0 - (i / 5.0)
         shadow_draw.ellipse([cx - rx*0.75, b_y - 2 - i, cx + rx*0.75, b_y + 2 + i], fill=(30, 25, 20, int(opacity * 0.45 * f)))
-    # Ambient soft contact shadow pool
     for i in range(14):
         factor = 1.0 - (i / 14.0)
         cur_rx = int(rx * (1.0 + i * 0.14))
@@ -203,7 +179,7 @@ for name, res_im, w in scaled_purifiers:
 banner = Image.alpha_composite(banner.convert('RGBA'), shadow_layer).convert('RGB')
 draw = ImageDraw.Draw(banner)
 
-# 6. Left Typography Lockup with the New Tagline Format
+# 6. Left Typography Lockup: Brand + Website Burgundy/Gold Color Theme Tagline
 LEFT_X = 42
 font_bold = r'C:\Windows\Fonts\segoeuib.ttf'
 font_arial_bold = r'C:\Windows\Fonts\arialbd.ttf'
@@ -217,16 +193,18 @@ draw.text((LEFT_X, 48), 'KENT', font=font_logo_big, fill=(15, 45, 95))
 draw.text((LEFT_X + 152, 50), '®', font=font_logo_reg, fill=(40, 40, 40))
 draw.text((LEFT_X + 2, 94), 'HOUSE OF PURITY', font=font_tag, fill=(130, 130, 135))
 
-# NEW TAGLINE: "Purified Water." and "Essential Purity." in DM Serif Display
+# 7. TAGLINE IN DM SERIF DISPLAY WITH WEBSITE BURGUNDY & GOLD COLOR THEME
 font_dm_path = 'fonts/DMSerifDisplay-Regular.ttf' if os.path.exists('fonts/DMSerifDisplay-Regular.ttf') else 'DMSerifDisplay-Regular.ttf'
-f_tagline = ImageFont.truetype(font_dm_path, 48)
-text1 = "Purified Water."
-text2 = "Essential Purity."
+f_tagline = ImageFont.truetype(font_dm_path, 42)
 
-# Line 1: Solid Slate Charcoal #1A2E31
-draw.text((LEFT_X, 150), text1, font=f_tagline, fill=(26, 46, 49))
+text1 = "Mineral Technology."
+text2 = "Pure Hydration."
 
-# Line 2: Precision Linear Gradient (Pine Teal #105b50 -> Jade #1c705d -> Sage #698a5c -> Warm Olive Gold #b29e52)
+# Line 1: Crisp Dark Charcoal/Black #0A0A0A (matching reference line 1 contrast)
+draw.text((LEFT_X, 150), text1, font=f_tagline, fill=(10, 10, 10))
+
+# Line 2: Precision Multi-Stop Gradient matching Website Color Palette:
+# Regal Burgundy (#800020) -> Ruby Wine (#A81941) -> Velvet Rose (#C04B64) -> Warm Luxury Gold (#B98C50)
 dummy = Image.new('RGBA', (1, 1))
 d = ImageDraw.Draw(dummy)
 b2 = d.textbbox((0, 0), text2, font=f_tagline)
@@ -237,24 +215,19 @@ gradient_img = Image.new('RGB', (w2 + 4, h2 + 4))
 grad_draw = ImageDraw.Draw(gradient_img)
 
 stops = [
-    (0.0, (16, 91, 80)),      # Deep forest jade (#105b50)
-    (0.38, (28, 112, 93)),    # Rich emerald teal (#1c705d)
-    (0.68, (105, 138, 92)),   # Earthy sage (#698a5c)
-    (1.0, (178, 158, 82))     # Warm golden ochre (#b29e52)
+    (0.0, (128, 0, 32)),      # Signature Burgundy (#800020)
+    (0.40, (168, 25, 65)),    # Rich Ruby Wine (#A81941)
+    (0.72, (192, 75, 100)),   # Velvet Rose (#C04B64)
+    (1.0, (185, 140, 80))     # Warm Luxury Gold (#B98C50)
 ]
 
 for x in range(w2 + 4):
     t = x / float(w2 + 4)
-    if t <= stops[1][0]:
-        factor = (t - stops[0][0]) / (stops[1][0] - stops[0][0])
-        c0, c1 = stops[0][1], stops[1][1]
-    elif t <= stops[2][0]:
-        factor = (t - stops[1][0]) / (stops[2][0] - stops[1][0])
-        c0, c1 = stops[1][1], stops[2][1]
-    else:
-        factor = (t - stops[2][0]) / (stops[3][0] - stops[2][0])
-        c0, c1 = stops[2][1], stops[3][1]
-    
+    for i in range(len(stops) - 1):
+        if stops[i][0] <= t <= stops[i+1][0]:
+            factor = (t - stops[i][0]) / (stops[i+1][0] - stops[i][0])
+            c0, c1 = stops[i][1], stops[i+1][1]
+            break
     r = int(c0[0] + factor * (c1[0] - c0[0]))
     g = int(c0[1] + factor * (c1[1] - c0[1]))
     b = int(c0[2] + factor * (c1[2] - c0[2]))
@@ -267,8 +240,8 @@ mask_draw.text((2 - b2[0], 2 - b2[1]), text2, font=f_tagline, fill=255)
 line2_composite = Image.new('RGBA', (w2 + 4, h2 + 4), (0, 0, 0, 0))
 line2_composite.paste(gradient_img, (0, 0), mask)
 
-# Paste line 2 at y=206
-banner.paste(line2_composite, (LEFT_X + b2[0] - 2, 206 + b2[1] - 2), mask)
+# Paste line 2 at y=204
+banner.paste(line2_composite, (LEFT_X + b2[0] - 2, 204 + b2[1] - 2), mask)
 
 # Subtitle / Add-on
 font_sub = ImageFont.truetype(font_bold, 14)
