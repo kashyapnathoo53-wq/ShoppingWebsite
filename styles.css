@@ -2021,6 +2021,15 @@ body.nav-menu-open {
     font-size: 0.68rem;
     padding: 0.3rem 0.75rem;
   }
+
+  .detail-stage-frame--poster {
+    padding: 0 0.75rem;
+  }
+
+  .detail-stage-poster {
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(45, 35, 25, 0.1);
+  }
 }
 
 .product-browser-hero .page-hero-content {
@@ -2072,9 +2081,11 @@ body.nav-menu-open {
 
 .detail-stage-frame--poster {
   width: 100%;
-  max-width: 100%;
+  max-width: 1440px;
   min-height: 0;
   margin: 0 auto;
+  padding: 0 var(--content-padding, 1.5rem);
+  box-sizing: border-box;
   background: transparent;
   display: flex;
   align-items: center;
@@ -2090,7 +2101,8 @@ body.nav-menu-open {
   object-fit: contain;
   display: block;
   margin: 0 auto;
-  border-radius: 0;
+  border-radius: 20px;
+  box-shadow: 0 14px 36px rgba(45, 35, 25, 0.14);
   z-index: 2;
 }
 
