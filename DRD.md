@@ -15,7 +15,7 @@ The design language of the KENT digital platform blends **contemporary architect
 ### Core Visual Pillars:
 1. **Architectural Purity**: Clean horizontal planes, pure white backgrounds, warm travertine stone textures, and subtle sunlit water caustics.
 2. **Liquid Elegance**: High-speed photographic water physics with crystal-clear refractions, micro-droplets, and dynamic fluid arcs framing products.
-3. **Warm Luxury Palette**: An intentional shift from generic teal/medical blue toward regal burgundy, ruby wine, and warm brushed champagne gold.
+3. **Warm Luxury Palette**: An intentional shift toward deep espresso brown, warm mocha, soft almond cream, and warm brushed champagne gold.
 4. **Editorial Typography**: Pairing a distinguished high-contrast serif display typeface with an ultra-legible humanist sans-serif for interface clarity.
 
 ---
@@ -26,21 +26,31 @@ The design language of the KENT digital platform blends **contemporary architect
 
 ```css
 :root {
-  /* Signature Brand Hues */
-  --burgundy: #800020;             /* Regal Signature Burgundy (Primary brand identity) */
-  --burgundy-dark: #5A0017;        /* Deep Wine (Hover & pressed CTA states) */
-  --burgundy-light: #FDF2F4;       /* Soft Blush Tint (Badge backgrounds & chip selection) */
-  --burgundy-border: rgba(128, 0, 32, 0.15); /* Delimiting borders & dividers */
+  /* Signature Brand Hues (Brown & White Palette) */
+  --brown: #4E3629;                /* Warm Roasted Espresso Brown (Primary brand identity) */
+  --brown-light: #6E4D3B;          /* Medium Warm Mocha (Accent hover states) */
+  --brown-dark: #332218;           /* Deep Espresso Brown (Hover & pressed CTA states) */
+  --brown-deep: #24160E;           /* Deepest Dark Roast (Footer background & contrast) */
+  --brown-soft: #A27B66;           /* Soft Cinnamon / Mocha (Decorative badges & icons) */
+  --brown-tint: #F7F3EE;           /* Very Light Almond Tint (Badge backgrounds & chips) */
+  --brown-surface: #FAF6F2;        /* Warm Milk / Cream Surface */
+  --brown-border: rgba(78, 54, 41, 0.15); /* Delimiting borders & dividers */
+
+  /* Backwards-Compatibility Aliases */
+  --burgundy: #4E3629;
+  --burgundy-dark: #332218;
+  --burgundy-light: #F7F3EE;
+  --burgundy-border: rgba(78, 54, 41, 0.15);
 
   /* Luxury Accents */
-  --gold: #B59E52;                 /* Brushed Champagne Gold (Eyebrow text & icons) */
-  --gold-dark: #78642A;            /* Deep Bronze Gold (High-contrast text on light surfaces) */
-  --gold-gradient: linear-gradient(135deg, #800020 0%, #A81941 40%, #C04B64 72%, #B98C50 100%);
+  --gold: #C5A880;                 /* Warm Champagne Gold (Eyebrow text & icons) */
+  --gold-dark: #8C6D48;            /* Deep Bronze Gold (High-contrast text on light surfaces) */
+  --gold-gradient: linear-gradient(135deg, #4E3629 0%, #7A523C 40%, #A27B66 72%, #C5A880 100%);
   
   /* Neutral Architecture & Surfaces */
   --bg-primary: #FFFFFF;           /* Crisp Pure White (Canvas, product stage, cards) */
   --bg-secondary: #FAFAFA;         /* Soft Off-White (Section backgrounds & alternations) */
-  --bg-tertiary: #F7F5F0;          /* Warm Alabaster (Pillars, testimonial backdrops) */
+  --bg-tertiary: #F7F3EE;          /* Warm Almond Cream (Pillars, testimonial backdrops) */
   --stone-travertine: #E8E2D5;     /* Warm Polished Travertine (Hero stage plinth) */
 
   /* Typography Colors */
@@ -57,8 +67,8 @@ The design language of the KENT digital platform blends **contemporary architect
 ```
 
 ### 2.2 Hero Tagline Multi-Stop Gradient Formula
-To achieve the luxurious metallic-to-wine transition on the hero headline:
-$$\text{Gradient: } 0\% \rightarrow \text{\#800020} \quad 40\% \rightarrow \text{\#A81941} \quad 72\% \rightarrow \text{\#C04B64} \quad 100\% \rightarrow \text{\#B98C50}$$
+To achieve the luxurious warm chocolate-to-champagne gold transition on the hero headline:
+$$\text{Gradient: } 0\% \rightarrow \text{\#4E3629} \quad 40\% \rightarrow \text{\#7A523C} \quad 72\% \rightarrow \text{\#A27B66} \quad 100\% \rightarrow \text{\#C5A880}$$
 
 ---
 
@@ -117,7 +127,7 @@ Contact shadows for floating product units and hero purifiers are rendered using
 * **Border**: `1px solid rgba(0, 0, 0, 0.06)` along bottom edge.
 * **Search Pill**:
   * Pill container with `border-radius: 999px`.
-  * Background: `#F5F5F5` transitioning to `#FFFFFF` on focus with Burgundy border ring (`2px solid rgba(128, 0, 32, 0.35)`).
+  * Background: `#F5F5F5` transitioning to `#FFFFFF` on focus with Brown border ring (`2px solid rgba(78, 54, 41, 0.35)`).
 * **Cart Badge**:
   * Positioned absolute top-right of cart icon.
   * Dimensions: `18px × 18px`, circular, background `#800020`, text `#FFFFFF`, bold `11px`.
@@ -156,8 +166,8 @@ Contact shadows for floating product units and hero purifiers are rendered using
   * Pill container with `36px` height.
   * Minus/Plus buttons with smooth active scale (`transform: scale(0.92)`).
 * **CTA Cluster**:
-  * Primary: "Add to Cart" (Burgundy `#800020`, text `#FFFFFF`).
-  * Secondary: "Buy Now" (Ghost style with Burgundy border and text).
+  * Primary: "Add to Cart" (Brown `#4E3629`, text `#FFFFFF`).
+  * Secondary: "Buy Now" (Ghost style with Brown border and text).
   * Marketplace: Amazon orange icon with external redirect indicator.
 
 ### 5.6 Slide-Over Cart Drawer (`.cart-drawer`)
@@ -172,13 +182,13 @@ Contact shadows for floating product units and hero purifiers are rendered using
 * **Quick-Select Chips**:
   * Pill buttons for **Today**, **Tomorrow**, **Day After Tomorrow**, **This Weekend**.
   * Default State: White background, subtle border, `#555555` text.
-  * Active/Selected State: Burgundy `#800020` background, pure white text, elevation shadow.
+  * Active/Selected State: Brown `#4E3629` background, pure white text, elevation shadow.
 * **Date Input**:
   * Clean styled date picker with minimum constraint set dynamically to today's date.
   * Calendar icon embedded via SVG data URI.
 * **Dynamic Preview Pill**:
   * Real-time preview chip rendering: `📅 Scheduled for: [Selected Date Display]`.
-  * Styled in soft gold/burgundy tint (`#FDF2F4`).
+  * Styled in soft almond tint (`#F7F3EE`).
 
 ---
 

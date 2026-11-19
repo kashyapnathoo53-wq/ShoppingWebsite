@@ -80,7 +80,7 @@ flowchart TD
 * **FR2.2 Liquid Water Physics Effect**:
   * 3D crystalline liquid water splash swooping gracefully over the purifiers with realistic refractions.
 * **FR2.3 Brand Typography & Tagline**:
-  * Editorial typography: `Mineral Technology` in solid dark charcoal, `Pure Hydration` in signature Burgundy-to-Gold gradient.
+  * Editorial typography: `Mineral Technology` in solid white/charcoal, `Pure Hydration` in warm champagne gold gradient.
   * No trailing periods (full stops).
 * **FR2.4 Trust Badge Row**: Displays `1 Crore+ Happy Families`, `25+ Years Purity & Trust`, `100% Retained Minerals`.
 * **FR2.5 Floating Trust Metrics Pill**: Positioned directly underneath the CTA buttons with zero horizontal overflow.

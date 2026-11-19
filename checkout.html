@@ -14,17 +14,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=23.0">
 
     <style>
         /* ═══════════════════════════════════════════════════════════
            CHECKOUT & PAYMENT PAGE CUSTOM STYLES
            ═══════════════════════════════════════════════════════════ */
         :root {
-            --burgundy: #800020;
-            --burgundy-dark: #5A0017;
-            --burgundy-light: #FDF2F4;
-            --burgundy-border: rgba(128, 0, 32, 0.15);
+            --brown: #4E3629;
+            --brown-dark: #332218;
+            --brown-light: #F7F3EE;
+            --brown-border: rgba(78, 54, 41, 0.15);
+            --burgundy: #4E3629;
+            --burgundy-dark: #332218;
+            --burgundy-light: #F7F3EE;
+            --burgundy-border: rgba(78, 54, 41, 0.15);
             --bg-light: #FAFAFA;
             --text-main: #0A0A0A;
             --text-muted: #666666;
@@ -277,7 +281,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--burgundy);
-            box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+            box-shadow: 0 0 0 3px rgba(78, 54, 41, 0.1);
         }
 
         .form-control.is-invalid {
@@ -416,7 +420,7 @@
 
         .payment-option-card.is-selected {
             border-color: var(--burgundy);
-            box-shadow: 0 4px 14px rgba(128, 0, 32, 0.08);
+            box-shadow: 0 4px 14px rgba(78, 54, 41, 0.08);
         }
 
         .payment-option-card.is-selected .payment-option-body {
@@ -512,7 +516,7 @@
             border: 1px solid var(--burgundy-border);
             border-radius: 16px;
             padding: 1.75rem;
-            box-shadow: 0 6px 24px rgba(128, 0, 32, 0.05);
+            box-shadow: 0 6px 24px rgba(78, 54, 41, 0.05);
         }
 
         .summary-title {
@@ -546,9 +550,9 @@
             width: 56px;
             height: 56px;
             border-radius: 8px;
-            background: #FDF2F4;
+            background: #F7F3EE;
             object-fit: contain;
-            border: 1px solid rgba(128, 0, 32, 0.08);
+            border: 1px solid rgba(78, 54, 41, 0.08);
             flex-shrink: 0;
         }
 
@@ -655,7 +659,7 @@
             letter-spacing: -0.01em;
             cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: 0 6px 20px rgba(128, 0, 32, 0.25);
+            box-shadow: 0 6px 20px rgba(78, 54, 41, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -666,7 +670,7 @@
         .pay-now-btn:hover {
             background: var(--burgundy-dark);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(128, 0, 32, 0.35);
+            box-shadow: 0 8px 24px rgba(78, 54, 41, 0.35);
         }
 
         .pay-now-btn:active {
@@ -912,7 +916,7 @@
                     <section class="checkout-card">
                         <div class="checkout-card-header">
                             <h2>
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#800020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#4E3629" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                     <circle cx="12" cy="10" r="3"></circle>
                                 </svg>
@@ -1011,7 +1015,7 @@
                     <section class="checkout-card">
                         <div class="checkout-card-header">
                             <h2>
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#800020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#4E3629" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                                     <line x1="1" y1="10" x2="23" y2="10"></line>
                                 </svg>
@@ -1037,29 +1041,29 @@
                                             <!-- SVG Simulated QR Code -->
                                             <svg viewBox="0 0 100 100" width="100%" height="100%">
                                                 <rect width="100" height="100" fill="#FFFFFF"/>
-                                                <rect x="6" y="6" width="28" height="28" fill="#800020"/>
+                                                <rect x="6" y="6" width="28" height="28" fill="#4E3629"/>
                                                 <rect x="10" y="10" width="20" height="20" fill="#FFFFFF"/>
-                                                <rect x="14" y="14" width="12" height="12" fill="#800020"/>
-                                                <rect x="66" y="6" width="28" height="28" fill="#800020"/>
+                                                <rect x="14" y="14" width="12" height="12" fill="#4E3629"/>
+                                                <rect x="66" y="6" width="28" height="28" fill="#4E3629"/>
                                                 <rect x="70" y="10" width="20" height="20" fill="#FFFFFF"/>
-                                                <rect x="74" y="14" width="12" height="12" fill="#800020"/>
-                                                <rect x="6" y="66" width="28" height="28" fill="#800020"/>
+                                                <rect x="74" y="14" width="12" height="12" fill="#4E3629"/>
+                                                <rect x="6" y="66" width="28" height="28" fill="#4E3629"/>
                                                 <rect x="10" y="70" width="20" height="20" fill="#FFFFFF"/>
-                                                <rect x="14" y="74" width="12" height="12" fill="#800020"/>
+                                                <rect x="14" y="74" width="12" height="12" fill="#4E3629"/>
                                                 <!-- QR pattern elements -->
-                                                <rect x="40" y="10" width="6" height="6" fill="#800020"/>
-                                                <rect x="52" y="10" width="6" height="12" fill="#800020"/>
-                                                <rect x="40" y="24" width="12" height="6" fill="#800020"/>
-                                                <rect x="10" y="44" width="8" height="8" fill="#800020"/>
-                                                <rect x="24" y="44" width="8" height="14" fill="#800020"/>
-                                                <rect x="40" y="40" width="20" height="20" fill="#800020"/>
+                                                <rect x="40" y="10" width="6" height="6" fill="#4E3629"/>
+                                                <rect x="52" y="10" width="6" height="12" fill="#4E3629"/>
+                                                <rect x="40" y="24" width="12" height="6" fill="#4E3629"/>
+                                                <rect x="10" y="44" width="8" height="8" fill="#4E3629"/>
+                                                <rect x="24" y="44" width="8" height="14" fill="#4E3629"/>
+                                                <rect x="40" y="40" width="20" height="20" fill="#4E3629"/>
                                                 <rect x="45" y="45" width="10" height="10" fill="#FFFFFF"/>
-                                                <rect x="68" y="44" width="10" height="8" fill="#800020"/>
-                                                <rect x="84" y="44" width="8" height="14" fill="#800020"/>
-                                                <rect x="40" y="68" width="8" height="16" fill="#800020"/>
-                                                <rect x="54" y="68" width="14" height="8" fill="#800020"/>
-                                                <rect x="54" y="82" width="14" height="8" fill="#800020"/>
-                                                <rect x="74" y="68" width="18" height="18" fill="#800020"/>
+                                                <rect x="68" y="44" width="10" height="8" fill="#4E3629"/>
+                                                <rect x="84" y="44" width="8" height="14" fill="#4E3629"/>
+                                                <rect x="40" y="68" width="8" height="16" fill="#4E3629"/>
+                                                <rect x="54" y="68" width="14" height="8" fill="#4E3629"/>
+                                                <rect x="54" y="82" width="14" height="8" fill="#4E3629"/>
+                                                <rect x="74" y="68" width="18" height="18" fill="#4E3629"/>
                                             </svg>
                                         </div>
                                         <div class="upi-details-wrap">
@@ -1315,7 +1319,7 @@
     </div>
 
     <!-- Toast Notification Element -->
-    <div id="checkoutToast" style="position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#800020; color:#fff; padding:12px 24px; border-radius:999px; font-size:0.88rem; font-weight:600; box-shadow:0 6px 20px rgba(0,0,0,0.25); z-index:9999; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); opacity:0; pointer-events:none;">
+    <div id="checkoutToast" style="position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#4E3629; color:#fff; padding:12px 24px; border-radius:999px; font-size:0.88rem; font-weight:600; box-shadow:0 6px 20px rgba(0,0,0,0.25); z-index:9999; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); opacity:0; pointer-events:none;">
     </div>
 
     <!-- Client-side Logic Script -->
