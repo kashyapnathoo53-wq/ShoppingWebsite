@@ -101,8 +101,8 @@ draw.text((LEFT_X + 2, 94), 'HOUSE OF PURITY', font=font_tag, fill=(130, 130, 13
 font_dm_path = 'fonts/DMSerifDisplay-Regular.ttf' if os.path.exists('fonts/DMSerifDisplay-Regular.ttf') else 'DMSerifDisplay-Regular.ttf'
 f_tagline = ImageFont.truetype(font_dm_path, 42)
 
-text1 = "Mineral Technology."
-text2 = "Pure Hydration."
+text1 = "Mineral Technology"
+text2 = "Pure Hydration"
 
 # Line 1: Crisp Dark Charcoal/Black #0A0A0A
 draw.text((LEFT_X, 150), text1, font=f_tagline, fill=(10, 10, 10))
