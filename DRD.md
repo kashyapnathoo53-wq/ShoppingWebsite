@@ -13,49 +13,47 @@
 The design language of the KENT digital platform blends **contemporary architectural minimalism** with **editorial wellness luxury**. It moves away from cold, clinical appliance aesthetics toward a warm, human-centered, premium consumer lifestyle experience.
 
 ### Core Visual Pillars:
-1. **Architectural Purity**: Clean horizontal planes, pure white backgrounds, warm travertine stone textures, and subtle sunlit water caustics.
+1. **Architectural Purity**: Clean horizontal planes, pure white backgrounds, tech surfaces, and subtle water caustics.
 2. **Liquid Elegance**: High-speed photographic water physics with crystal-clear refractions, micro-droplets, and dynamic fluid arcs framing products.
-3. **Warm Luxury Palette**: An intentional shift toward deep espresso brown, warm mocha, soft almond cream, and warm brushed champagne gold.
-4. **Editorial Typography**: Pairing a distinguished high-contrast serif display typeface with an ultra-legible humanist sans-serif for interface clarity.
+3. **Roborock-Inspired High-Tech Aesthetic**: Bold signature vermilion red accents, crisp pure white canvases, obsidian black typography, and sleek modern surfaces matching `https://us.roborock.com/`.
+4. **Editorial Typography**: Pairing a distinguished high-contrast display typeface with an ultra-legible humanist sans-serif for interface clarity.
 
 ---
 
 ## 2. Color System & Design Tokens
 
-### 2.1 Brand & Accent Colors
+### 2.1 Brand & Accent Colors (Roborock Design System)
 
 ```css
 :root {
-  /* Signature Brand Hues (Brown & White Palette) */
-  --brown: #4E3629;                /* Warm Roasted Espresso Brown (Primary brand identity) */
-  --brown-light: #6E4D3B;          /* Medium Warm Mocha (Accent hover states) */
-  --brown-dark: #332218;           /* Deep Espresso Brown (Hover & pressed CTA states) */
-  --brown-deep: #24160E;           /* Deepest Dark Roast (Footer background & contrast) */
-  --brown-soft: #A27B66;           /* Soft Cinnamon / Mocha (Decorative badges & icons) */
-  --brown-tint: #F7F3EE;           /* Very Light Almond Tint (Badge backgrounds & chips) */
-  --brown-surface: #FAF6F2;        /* Warm Milk / Cream Surface */
-  --brown-border: rgba(78, 54, 41, 0.15); /* Delimiting borders & dividers */
+  /* Signature Brand Hues (Roborock High-Tech Palette) */
+  --roborock-red: #EB0029;         /* Signature Roborock Red (Primary brand CTA & accents) */
+  --roborock-red-hover: #C50022;   /* Deep Roborock Red (Hover & active states) */
+  --roborock-red-deep: #9E001A;    /* Dark Crimson Red (Pressed states) */
+  --roborock-red-tint: #FEF2F4;    /* Soft Rose Tint (Badge backgrounds & active chips) */
+  --roborock-red-border: rgba(235, 0, 41, 0.15); /* Delimiting borders & focus rings */
 
-  /* Backwards-Compatibility Aliases */
-  --burgundy: #4E3629;
-  --burgundy-dark: #332218;
-  --burgundy-light: #F7F3EE;
-  --burgundy-border: rgba(78, 54, 41, 0.15);
+  /* Primary Brand Aliases */
+  --primary: #EB0029;
+  --primary-hover: #C50022;
+  --burgundy: #EB0029;
+  --burgundy-dark: #C50022;
+  --burgundy-light: #FEF2F4;
+  --burgundy-border: rgba(235, 0, 41, 0.15);
 
-  /* Luxury Accents */
+  /* Modern Accents & Gradients */
+  --accent-red-gradient: linear-gradient(135deg, #EB0029 0%, #FF2E4D 100%);
   --gold: #C5A880;                 /* Warm Champagne Gold (Eyebrow text & icons) */
-  --gold-dark: #8C6D48;            /* Deep Bronze Gold (High-contrast text on light surfaces) */
-  --gold-gradient: linear-gradient(135deg, #4E3629 0%, #7A523C 40%, #A27B66 72%, #C5A880 100%);
   
   /* Neutral Architecture & Surfaces */
   --bg-primary: #FFFFFF;           /* Crisp Pure White (Canvas, product stage, cards) */
   --bg-secondary: #FAFAFA;         /* Soft Off-White (Section backgrounds & alternations) */
-  --bg-tertiary: #F7F3EE;          /* Warm Almond Cream (Pillars, testimonial backdrops) */
-  --stone-travertine: #E8E2D5;     /* Warm Polished Travertine (Hero stage plinth) */
+  --bg-tertiary: #F5F7FA;          /* Roborock Tech Light Gray (Surfaces, pills, backdrops) */
+  --border-light: rgba(0, 0, 0, 0.08); /* Minimal modern card borders */
 
   /* Typography Colors */
-  --text-primary: #0A0A0A;         /* Charcoal Black (Headings & high-contrast titles) */
-  --text-secondary: #555555;       /* Slate Neutral (Body copy & secondary specs) */
+  --text-primary: #111111;         /* Tech Obsidian Black (Headings & high-contrast titles) */
+  --text-secondary: #444444;       /* Slate Neutral (Body copy & secondary specs) */
   --text-muted: #777777;           /* Cool Gray (Labels, captions, strikethrough MRP) */
 
   /* Feedback & Utility */
@@ -66,9 +64,10 @@ The design language of the KENT digital platform blends **contemporary architect
 }
 ```
 
-### 2.2 Hero Tagline Multi-Stop Gradient Formula
-To achieve the luxurious warm chocolate-to-champagne gold transition on the hero headline:
-$$\text{Gradient: } 0\% \rightarrow \text{\#4E3629} \quad 40\% \rightarrow \text{\#7A523C} \quad 72\% \rightarrow \text{\#A27B66} \quad 100\% \rightarrow \text{\#C5A880}$$
+### 2.2 Roborock Palette Contrast & Hierarchy
+* Primary Action Buttons & Key Indicators: `#EB0029` against `#FFFFFF` (high contrast ratio > 4.5:1).
+* Tech Dark Typography: `#111111` on `#FFFFFF` and `#F5F7FA`.
+* Subtle Chip & Filter Backgrounds: `#FEF2F4` with border `rgba(235, 0, 41, 0.2)`.
 
 ---
 
@@ -127,10 +126,10 @@ Contact shadows for floating product units and hero purifiers are rendered using
 * **Border**: `1px solid rgba(0, 0, 0, 0.06)` along bottom edge.
 * **Search Pill**:
   * Pill container with `border-radius: 999px`.
-  * Background: `#F5F5F5` transitioning to `#FFFFFF` on focus with Brown border ring (`2px solid rgba(78, 54, 41, 0.35)`).
+  * Background: `#F5F7FA` transitioning to `#FFFFFF` on focus with Roborock Red border ring (`2px solid rgba(235, 0, 41, 0.35)`).
 * **Cart Badge**:
   * Positioned absolute top-right of cart icon.
-  * Dimensions: `18px × 18px`, circular, background `#800020`, text `#FFFFFF`, bold `11px`.
+  * Dimensions: `18px × 18px`, circular, background `#EB0029`, text `#FFFFFF`, bold `11px`.
 
 ### 5.2 Hero Stage Showcase Banner
 * **Aspect Ratio**: 16:9 panoramic (`1376px × 545px` canvas).
@@ -138,6 +137,7 @@ Contact shadows for floating product units and hero purifiers are rendered using
 * **Visual Elements**:
   * Left: Brand Lockup (`KENT® HOUSE OF PURITY`), Tagline (`Mineral Technology / Pure Hydration`), Technology descriptor, and 3-column trust metrics.
   * Right: Complete 4-purifier lineup (**Pearl IoT**, **Grand IoT**, **KENT Grand**, **Supreme Plus Neo**) with crystal liquid water arc and grounding contact shadows.
+  * Layout Note: Hero action CTA buttons removed to emphasize clean editorial visual space and seamless visual flow into the Key Trust Metrics pill card.
 
 ### 5.3 Key Trust Metrics Pill Card
 * **Layout**: Horizontal flex row (Desktop) / 2×2 grid (Mobile).
@@ -150,11 +150,11 @@ Contact shadows for floating product units and hero purifiers are rendered using
 * **Surface**: Crisp white with `border-radius: 16px` and `border: 1px solid rgba(0, 0, 0, 0.07)`.
 * **Hover Interaction**:
   * `transform: translateY(-5px);`
-  * `box-shadow: 0 16px 36px rgba(128, 0, 32, 0.08);`
-  * `border-color: rgba(128, 0, 32, 0.25);`
+  * `box-shadow: 0 16px 36px rgba(235, 0, 41, 0.08);`
+  * `border-color: rgba(235, 0, 41, 0.25);`
 * **Media Frame**: Square aspect ratio with product centered and subtle background gradient.
 * **Pricing Block**:
-  * Sale Price: `1.3rem`, bold, `#0A0A0A`.
+  * Sale Price: `1.3rem`, bold, `#111111`.
   * MRP: `0.9rem`, strikethrough, `#888888`.
   * Savings Badge: `rgba(16, 185, 129, 0.12)` background, `#047857` green text, bold `0.72rem`.
 
@@ -166,8 +166,8 @@ Contact shadows for floating product units and hero purifiers are rendered using
   * Pill container with `36px` height.
   * Minus/Plus buttons with smooth active scale (`transform: scale(0.92)`).
 * **CTA Cluster**:
-  * Primary: "Add to Cart" (Brown `#4E3629`, text `#FFFFFF`).
-  * Secondary: "Buy Now" (Ghost style with Brown border and text).
+  * Primary: "Add to Cart" (Roborock Red `#EB0029`, text `#FFFFFF`).
+  * Secondary: "Buy Now" (Ghost style with Roborock Red border and text).
   * Marketplace: Amazon orange icon with external redirect indicator.
 
 ### 5.6 Slide-Over Cart Drawer (`.cart-drawer`)
@@ -182,13 +182,13 @@ Contact shadows for floating product units and hero purifiers are rendered using
 * **Quick-Select Chips**:
   * Pill buttons for **Today**, **Tomorrow**, **Day After Tomorrow**, **This Weekend**.
   * Default State: White background, subtle border, `#555555` text.
-  * Active/Selected State: Brown `#4E3629` background, pure white text, elevation shadow.
+  * Active/Selected State: Roborock Red `#EB0029` background, pure white text, elevation shadow.
 * **Date Input**:
   * Clean styled date picker with minimum constraint set dynamically to today's date.
   * Calendar icon embedded via SVG data URI.
 * **Dynamic Preview Pill**:
   * Real-time preview chip rendering: `📅 Scheduled for: [Selected Date Display]`.
-  * Styled in soft almond tint (`#F7F3EE`).
+  * Styled in soft rose tint (`#FEF2F4`).
 
 ---
 
